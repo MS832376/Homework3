@@ -58,6 +58,9 @@ public class MissionDemolition : MonoBehaviour
     void Update(){
         UpdateGUI();
         if((mode == GameMode.playing) && Goal.goalMet){
+            if(shotsTaken < ShotScores.score){
+                ShotScores.score = shotsTaken;
+            }
             mode = GameMode.levelEnd;
             SwitchView("Show Both");
             Invoke("NextLevel",2f);
