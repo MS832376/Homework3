@@ -5,28 +5,23 @@ using UnityEngine.UI;
 
 public class ShotScores : MonoBehaviour
 {
-    static public int score = 10;
-    public int curLevel;
-    public List<string> scores = new List<string>();
+    static public int score = 21;
     void Awake(){
-        if(PlayerPrefs.HasKey("HighScore__" + MissionDemolition.level)){
-            score = PlayerPrefs.GetInt("HighScore__" + MissionDemolition.level);
-            //scores[MissionDemolition.level] = "Best Score: " + score;
+        if(PlayerPrefs.HasKey("ShotsTaken_")){
+            score = PlayerPrefs.GetInt("ShotsTaken_");
         }
-        PlayerPrefs.SetInt("HighScore__" + MissionDemolition.level, score);
+        PlayerPrefs.SetInt("ShotsTaken_", score);
         
     }
 
     // Update is called once per frame
     void Update()
     {
-        //print(MissionDemolition.level);
-        //print(MissionDemolition.levelMax);
+
         Text gt = this.GetComponent<Text>();
         gt.text = "Best Score: " + score;
-    
-        if(score < PlayerPrefs.GetInt("HighScore__" + MissionDemolition.level)){
-            PlayerPrefs.SetInt("HighScore__" + MissionDemolition.level, score);
+        if(score < PlayerPrefs.GetInt("ShotsTaken_")){
+            PlayerPrefs.SetInt("ShotsTaken_", score);
         }
         
     }

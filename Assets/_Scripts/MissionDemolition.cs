@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum GameMode{
     idle,
@@ -21,6 +22,8 @@ public class MissionDemolition : MonoBehaviour
     [Header("Set Dynamically")]
     public static int level;
     public static int levelMax;
+    public static int totalShots;
+    public static int prevBest;
     public int shotsTaken;
     public GameObject castle;
     public GameMode mode = GameMode.idle;
@@ -30,6 +33,8 @@ public class MissionDemolition : MonoBehaviour
     {
         S = this;
         level = 0;
+        totalShots = 0;
+        prevBest = ShotScores.score;
         levelMax = castles.Length;
         StartLevel();
     }
@@ -58,9 +63,9 @@ public class MissionDemolition : MonoBehaviour
     void Update(){
         UpdateGUI();
         if((mode == GameMode.playing) && Goal.goalMet){
-            if(shotsTaken < ShotScores.score){
-                ShotScores.score = shotsTaken;
-            }
+            //if(shotsTaken < ShotScores.score){
+            //    ShotScores.score = shotsTaken;
+            //}
             mode = GameMode.levelEnd;
             SwitchView("Show Both");
             Invoke("NextLevel",2f);
@@ -68,8 +73,12 @@ public class MissionDemolition : MonoBehaviour
     }
     void NextLevel(){
         level++;
+        totalShots = totalShots + shotsTaken;
         if(level == levelMax){
-            level = 0;
+            if(totalShots < ShotScores.score){
+                ShotScores.score = totalShots;
+            }
+            SceneManager.LoadScene("Winner");
         }
         StartLevel();
     }
