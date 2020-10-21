@@ -19,8 +19,8 @@ public class MissionDemolition : MonoBehaviour
     public Vector3 castlePos;
     public GameObject[] castles;
     [Header("Set Dynamically")]
-    public int level;
-    public int levelMax;
+    public static int level;
+    public static int levelMax;
     public int shotsTaken;
     public GameObject castle;
     public GameMode mode = GameMode.idle;
@@ -71,6 +71,9 @@ public class MissionDemolition : MonoBehaviour
         if(level == levelMax){
             level = 0;
         }
+        StartLevel();
+    }
+    public void RestartLevel(){
         StartLevel();
     }
 
