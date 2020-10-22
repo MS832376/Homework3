@@ -16,12 +16,14 @@ public class MissionDemolition : MonoBehaviour
     public Text uitLevel;
     public Text uitShots;
     public Text uitButton;
+    public Text uitBest;
     public Vector3 castlePos;
     public GameObject[] castles;
     [Header("Set Dynamically")]
     public int level;
     public int levelMax;
     public int shotsTaken;
+    public int[] score;
     public GameObject castle;
     public GameMode mode = GameMode.idle;
     public string showing = "Show Slingshot";
@@ -31,6 +33,7 @@ public class MissionDemolition : MonoBehaviour
         S = this;
         level = 0;
         levelMax = castles.Length;
+        score = new int[levelMax];
         StartLevel();
     }
     void StartLevel(){
@@ -44,7 +47,11 @@ public class MissionDemolition : MonoBehaviour
         castle = Instantiate<GameObject>(castles[level]);
         castle.transform.position = castlePos;
         shotsTaken = 0;
-
+        if(PlayerPrefs.HasKey("HighScore_"+level)){
+            score[level] = PlayerPrefs.GetInt("HighScore_"+level);
+        }else{
+            score[level] = 10;
+        }
         SwitchView("Show Both");
         ProjectileLine.S.Clear();
         Goal.goalMet = false;
@@ -54,12 +61,13 @@ public class MissionDemolition : MonoBehaviour
     void UpdateGUI(){
         uitLevel.text = "Level: " +(level+1)+" of " + levelMax;
         uitShots.text = "Shots Taken: " + shotsTaken;
+        uitBest.text = "Best Score: " + score[level];
     }
     void Update(){
         UpdateGUI();
         if((mode == GameMode.playing) && Goal.goalMet){
-            if(shotsTaken < ShotScores.score){
-                ShotScores.score = shotsTaken;
+            if(shotsTaken < score[level]){
+                score[level] = shotsTaken;
             }
             mode = GameMode.levelEnd;
             SwitchView("Show Both");
@@ -68,6 +76,11 @@ public class MissionDemolition : MonoBehaviour
     }
     void NextLevel(){
         level++;
+        if(PlayerPrefs.HasKey("HighScore_"+level)){
+            score[level] = PlayerPrefs.GetInt("HighScore_"+level);
+        }else{
+            score[level] = 10;
+        }
         if(level == levelMax){
             level = 0;
         }

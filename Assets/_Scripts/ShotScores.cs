@@ -10,14 +10,19 @@ public class ShotScores : MonoBehaviour
         if(PlayerPrefs.HasKey("HighScore")){
             score = PlayerPrefs.GetInt("HighScore");
         }
-        PlayerPrefs.SetInt("HighScore",score);
+        PlayerPrefs.SetInt("HighScore", score);
     }
 
     // Update is called once per frame
     void Update()
     {
         Text gt = this.GetComponent<Text>();
-        gt.text = "Fewest Shots: " + score;
+        gt.text = "Best Score: " + score;
+        if(PlayerPrefs.HasKey("HighScore")){
+            score = PlayerPrefs.GetInt("HighScore");
+        }else{
+            PlayerPrefs.SetInt("HighScore", 10);
+        }
         if(score < PlayerPrefs.GetInt("HighScore")){
             PlayerPrefs.SetInt("HighScore", score);
         }
